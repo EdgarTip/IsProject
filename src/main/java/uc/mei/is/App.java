@@ -15,9 +15,11 @@ import jakarta.xml.bind.Unmarshaller;
 //import javax.xml.bind.JAXBException;
 //import javax.xml.bind.Marshaller;
 import java.io.File;
+import java.io.FileInputStream;
 //import javax.xml.bind.*;
 //import javax.xml.stream.*;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.zip.GZIPOutputStream;
 
@@ -40,24 +42,48 @@ public class App {
             // output pretty printed
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-            jaxbMarshaller.marshal(createClassObject(), new File("C:\\Users\\edgar\\Desktop\\IS\\simplejaxb\\src\\test\\java\\uc\\mei\\is\\fruit.xml"));
+            jaxbMarshaller.marshal(createClassObject(), new File("simplejaxb\\output\\fruit.xml"));
+
+            
+
 
             ClassT clss = createClassObject();
             jaxbMarshaller.marshal(clss, System.out);
 
-            /*try{
-                FileOutputStream outputStream = new FileOutputStream(new File("/home/user/hellow.xml.gz"));
-                GZIPOutputStream outputStreamZip = new GZIPOutputStream(outputStream);
-            }
-            catch(Exception e){
-                return;
-            }*/
-
             // XML Unmarshalling
-            File file = new File("C:\\Users\\edgar\\Desktop\\IS\\simplejaxb\\src\\test\\java\\uc\\mei\\is\\fruit.xml");    
+            File file = new File("simplejaxb\\output\\fruit.xml");    
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             ClassT o = (ClassT) jaxbUnmarshaller.unmarshal(file);
             System.out.println(o);
+
+            byte[] buffer = new byte[1024];
+ 
+        try {
+             
+            FileOutputStream fileOutputStream =new FileOutputStream("simplejaxb\\output\\fruitZip");
+ 
+            GZIPOutputStream gzipOuputStream = new GZIPOutputStream(fileOutputStream);
+ 
+            FileInputStream fileInput = new FileInputStream("simplejaxb\\output\\fruit.xml");
+ 
+            int bytes_read;
+             
+            while ((bytes_read = fileInput.read(buffer)) > 0) {
+                gzipOuputStream.write(buffer, 0, bytes_read);
+            }
+ 
+            fileInput.close();
+ 
+            gzipOuputStream.finish();
+            gzipOuputStream.close();
+ 
+ 
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    
+
+            
 
         } catch (JAXBException e) {
             e.printStackTrace();
@@ -83,9 +109,14 @@ public class App {
         s3.setName("Luis");
         s3.setAge(21);
         s3.setId("201134441210");
+
+        Student s4 = new Student();
+        s4.setName("Luis");
+        s4.setAge(21);
+        s4.setId("201134441210");
        
 
-        clss.setList(Arrays.asList(s1, s2, s3));
+        clss.setList(Arrays.asList(s1, s2, s3, s4));
 
         return clss;
     }
