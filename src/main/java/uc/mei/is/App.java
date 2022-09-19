@@ -40,12 +40,13 @@ public class App {
             // output pretty printed
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-            jaxbMarshaller.marshal(createClassObject(), new File("C:\\Users\\edgar\\Desktop\\IS\\simplejaxb\\src\\test\\java\\uc\\mei\\is\\fruit.xml"));
+            jaxbMarshaller.marshal(createClassObject(), new File("output\\fruit.xml"));
 
             ClassT clss = createClassObject();
             jaxbMarshaller.marshal(clss, System.out);
 
-            /*try{
+            /*/
+            try{
                 FileOutputStream outputStream = new FileOutputStream(new File("/home/user/hellow.xml.gz"));
                 GZIPOutputStream outputStreamZip = new GZIPOutputStream(outputStream);
             }
@@ -54,7 +55,7 @@ public class App {
             }*/
 
             // XML Unmarshalling
-            File file = new File("C:\\Users\\edgar\\Desktop\\IS\\simplejaxb\\src\\test\\java\\uc\\mei\\is\\fruit.xml");    
+            File file = new File("output\\fruit.xml");    
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             ClassT o = (ClassT) jaxbUnmarshaller.unmarshal(file);
             System.out.println(o);
