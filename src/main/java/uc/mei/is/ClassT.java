@@ -10,15 +10,15 @@ import java.util.List;
 public class ClassT {
 
   @XmlElement(name = "student")
-  List<Student> list;
+  List<Professor> list;
 
 
 
-  public List<Student> getList() {
+  public List<Professor> getList() {
       return this.list;
   }
 
-  public void setList(List<Student> list) {
+  public void setList(List<Professor> list) {
       this.list = list;
   }
 

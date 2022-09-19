@@ -16,7 +16,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Student {
+public class Professor {
 
     @XmlAttribute
     String id;
@@ -25,22 +25,17 @@ public class Student {
     String telephone;
     String address;
     String birthdate;
-    String registrationDate;
-    String gender;
-    
-    public Student() {
-    }
 
-    public Student(String id, String name, String telephone, String address, String birthdate, String registrationDate, String gender) {
+    public Professor() {}
+
+    public Professor(String id, String name, String telephone, String address, String birthdate) {
         this.id = id;
         this.name = name;
         this.telephone = telephone;
         this.address = address;
         this.birthdate = birthdate;
-        this.registrationDate = registrationDate;
-        this.gender = gender;
     }
-
+    
     public String getId() {
         return this.id;
     }
@@ -80,24 +75,6 @@ public class Student {
     public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
-
-    public String getRegistrationDate() {
-        return this.registrationDate;
-    }
-
-    public void setRegistrationDate(String registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public String getGender() {
-		return this.gender; 
-	}
-
-    public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-
 
 
 }
