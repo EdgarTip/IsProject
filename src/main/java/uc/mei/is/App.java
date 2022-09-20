@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -70,7 +71,7 @@ public class App {
     private static void serializeXML(String filePath, ClassT clss, Marshaller jaxbMarshaller){
         try {
             jaxbMarshaller.marshal(clss, new File(filePath));
-
+            
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -160,7 +161,7 @@ public class App {
         </class>
     
     */
-    private static ClassT createClassObject(int NumberProfessors, int NumberStudents, int NumberNames) {
+    private static ClassT createClassObject(int numberProfessors, int numberStudents, int numberNames) {
         
         //Get random information from text files
         Scanner s;
@@ -180,7 +181,7 @@ public class App {
                 middleNamesList.add(s.next());
             }
 
-            s = new Scanner(new File("simplejaxb\\src\\main\\java\\uc\\mei\\is\files\\addresses.txt"));
+            s = new Scanner(new File("simplejaxb\\src\\main\\java\\uc\\mei\\is\\files\\addresses.txt"));
 
             while (s.hasNext()){
                 addressesList.add(s.next());
@@ -191,15 +192,64 @@ public class App {
             e.printStackTrace();
         }
         
-
-
         ClassT clss = new ClassT();
+
+        for(int i = 0; i < numberProfessors; i++){
+
+            String professorName = "";
+
+            Random random = new Random();
+            int randomIndex = random.nextInt(firstNamesList.size());
+            professorName += firstNamesList.get(randomIndex);
+
+            for(int k = 0; k < numberNames - 1; k++){
+                int randomIndex2 = random.nextInt(middleNamesList.size());
+                professorName += " " + middleNamesList.get(randomIndex2);
+            }
+
+            String address = "";
+            int randomIndex3 = random.nextInt(addressesList.size());
+            address += addressesList.get(randomIndex3);
+            
+            Professor prof = createProfessor(professorName, address);
+            
+            clss.addProfessor(prof);
+
+            for(int j = 0; j < numberStudents; j++){
+                String studentName = "";
+
+                int randomIndex4 = random.nextInt(firstNamesList.size());
+                studentName += firstNamesList.get(randomIndex4);
+    
+                for(int k = 0; k < numberNames; k++){
+                    int randomIndex5 = random.nextInt(middleNamesList.size());
+                    studentName += " " + middleNamesList.get(randomIndex5);
+                }
+    
+                String studentAddress = "";
+                int randomIndex6 = random.nextInt(addressesList.size());
+                studentAddress += addressesList.get(randomIndex6);
+                
+                Student stud = createStudent(studentName, studentAddress, "male");
+
+                prof.addStudent(stud);
+            }
+        }
+        
 
 
         return clss;
     }
 
+    //Creates a new student object
+    public static Student createStudent(String name, String address, String gender){
+        return new Student(randomId(), name, randomTelephoneNumber(), address, randomDate(), randomDate(), gender);
+    }
 
+    //Creates a new professor object
+    public static Professor createProfessor(String name, String address){
+        return new Professor(randomId(), name, randomTelephoneNumber(), address, randomDate());
+    }
 
 
 
@@ -220,6 +270,14 @@ public class App {
         int p1 = randBetween(900,999);
         int p2 = randBetween(100000,999999);
 
+        return String.valueOf(p1) + String.valueOf(p2);
+    }
+
+    //Creates random id for student
+    public static String randomId(){
+        int p1 = randBetween(100000,999999);
+        int p2 = randBetween(100000,999999);
+        
         return String.valueOf(p1) + String.valueOf(p2);
     }
 
