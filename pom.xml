@@ -53,6 +53,13 @@
       <artifactId>org.eclipse.persistence.moxy</artifactId>
       <version>3.0.0</version>
   </dependency>
+
+  <dependency>
+    <groupId>com.google.protobuf</groupId>
+    <artifactId>protobuf-java</artifactId>
+    <version>3.21.6</version>
+  </dependency>
+
   </dependencies>
 
   <build>
