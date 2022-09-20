@@ -1,9 +1,14 @@
 package uc.mei.is;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 
 
@@ -14,31 +19,32 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 
 
-
+@XmlType(propOrder = {"id","name","telephone","address","birthdate", "list"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Student {
+public class Professor {
 
     @XmlAttribute
     String id;
+
+    @XmlElement(name = "student")
+    List<Student> list;
 
     String name;
     String telephone;
     String address;
     String birthdate;
-    String registrationDate;
-    String gender;
-    
-    public Student() {
-    }
 
-    public Student(String id, String name, String telephone, String address, String birthdate, String registrationDate, String gender) {
+    
+
+    public Professor() {}
+
+    public Professor(String id, String name, String telephone, String address, String birthdate) {
+        list = new ArrayList<Student>();
         this.id = id;
         this.name = name;
         this.telephone = telephone;
         this.address = address;
         this.birthdate = birthdate;
-        this.registrationDate = registrationDate;
-        this.gender = gender;
     }
 
     public String getId() {
@@ -81,23 +87,9 @@ public class Student {
         this.birthdate = birthdate;
     }
 
-    public String getRegistrationDate() {
-        return this.registrationDate;
+    public void addStudent(Student student) {
+        list.add(student);
     }
-
-    public void setRegistrationDate(String registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public String getGender() {
-		return this.gender; 
-	}
-
-    public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-
 
 
 }

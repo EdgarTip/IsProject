@@ -2,6 +2,7 @@ package uc.mei.is;
 
 import jakarta.xml.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement(name = "Class", namespace = "http://www.dei.uc.pt/EAI")
@@ -9,18 +10,23 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ClassT {
 
-  @XmlElement(name = "student")
-  List<Student> list;
+  @XmlElement(name = "professor")
+  List<Professor> list;
 
+  public ClassT(){
+    list = new ArrayList<Professor>();
+  }
 
-
-  public List<Student> getList() {
+  public List<Professor> getList() {
       return this.list;
   }
 
-  public void setList(List<Student> list) {
+  public void setList(List<Professor> list) {
       this.list = list;
   }
 
+  public void addProfessor(Professor prof){
+    list.add(prof);
+  }
 
 }
