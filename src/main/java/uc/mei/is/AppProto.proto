@@ -3,12 +3,12 @@ syntax = "proto2";
 package uc.mei.is;
 
 option java_multiple_files = true;
-option java_package = "./";
-option java_outer_classname = "AppProto";
+option java_package = "com.proto.generated";
+option java_outer_classname = "AppProtoOuterClass";
 
 message Student {
   optional string name = 1;
-  optional int32 telephone = 2;
+  optional int64 telephone = 2;
   optional string gender = 3;
   optional string birthdate = 4;
   optional string address = 5;

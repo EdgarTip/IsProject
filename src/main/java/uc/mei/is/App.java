@@ -5,6 +5,7 @@ package uc.mei.is;
 
 
 // @Since 3.0.0, rebrand to jakarta.xml
+import com.proto.generated.Teacher;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -19,6 +20,7 @@ import java.io.File;
 //import javax.xml.stream.*;
 import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 public class App {
@@ -60,6 +62,8 @@ public class App {
             ClassT o = (ClassT) jaxbUnmarshaller.unmarshal(file);
             System.out.println(o);
 
+            // Proto Marshalling
+
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -89,5 +93,34 @@ public class App {
         clss.setList(Arrays.asList(s1, s2, s3));
 
         return clss;
+    }
+
+    private static class AddProtoObjects {
+
+        com.proto.generated.Teacher t1 = Teacher.newBuilder()
+                .setName("Ricardo")
+                .setTelephone(111111111)
+                .setBirthdate("11/11/1111")
+                .setAddress("aaa")
+                .build();
+
+        com.proto.generated.Student s1 = com.proto.generated.Student.newBuilder()
+                .setName("Alberto")
+                .setTelephone(999999999).setGender("male")
+                .setBirthdate("22/22/2222").setAddress("bbb")
+                .setTeacher(t1).build();
+
+        com.proto.generated.Student s2 = com.proto.generated.Student.newBuilder()
+                .setName("Patricia")
+                .setTelephone(888888888).setGender("female")
+                .setBirthdate("33/33/3333").setAddress("ccc")
+                .setTeacher(t1).build();
+
+        com.proto.generated.Student s3 = com.proto.generated.Student.newBuilder()
+                .setName("Luis")
+                .setTelephone(777777777).setGender("male")
+                .setBirthdate("44/44/4444").setAddress("ddd")
+                .setTeacher(t1).build();
+
     }
 }
