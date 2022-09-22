@@ -16,9 +16,13 @@ message Student {
 }
 
 message Teacher {
-  repeated Student students = 1;
-  optional string name = 2;
-  optional string birthdate = 3;
-  optional int32 telephone = 4;
-  optional string address = 5;
+  optional string name = 1;
+  optional string birthdate = 2;
+  optional int32 telephone = 3;
+  optional string address = 4;
+  repeated Student students = 5;
+}
+
+message Classrooms{
+  repeated Teacher teachers = 1;
 }

@@ -24,6 +24,11 @@ public final class AppProtoOuterClass {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_uc_mei_is_Teacher_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_uc_mei_is_Classrooms_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_uc_mei_is_Classrooms_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -39,9 +44,10 @@ public final class AppProtoOuterClass {
       " \001(\t\022#\n\007teacher\030\006 \001(\0132\022.uc.mei.is.Teache" +
       "r\"t\n\007Teacher\022$\n\010students\030\001 \003(\0132\022.uc.mei." +
       "is.Student\022\014\n\004name\030\002 \001(\t\022\021\n\tbirthdate\030\003 " +
-      "\001(\t\022\021\n\ttelephone\030\004 \001(\005\022\017\n\007address\030\005 \001(\tB" +
-      "+\n\023com.proto.generatedB\022AppProtoOuterCla" +
-      "ssP\001"
+      "\001(\t\022\021\n\ttelephone\030\004 \001(\005\022\017\n\007address\030\005 \001(\t\"" +
+      "2\n\nClassrooms\022$\n\010teachers\030\001 \003(\0132\022.uc.mei" +
+      ".is.TeacherB+\n\023com.proto.generatedB\022AppP" +
+      "rotoOuterClassP\001"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -59,6 +65,12 @@ public final class AppProtoOuterClass {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_uc_mei_is_Teacher_descriptor,
         new java.lang.String[] { "Students", "Name", "Birthdate", "Telephone", "Address", });
+    internal_static_uc_mei_is_Classrooms_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_uc_mei_is_Classrooms_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_uc_mei_is_Classrooms_descriptor,
+        new java.lang.String[] { "Teachers", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

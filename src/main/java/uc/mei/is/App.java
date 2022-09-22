@@ -5,7 +5,7 @@ package uc.mei.is;
 
 
 // @Since 3.0.0, rebrand to jakarta.xml
-import com.proto.generated.Teacher;
+
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -15,13 +15,13 @@ import jakarta.xml.bind.Unmarshaller;
 //import javax.xml.bind.JAXBContext;
 //import javax.xml.bind.JAXBException;
 //import javax.xml.bind.Marshaller;
-import java.io.File;
+import java.io.*;
 //import javax.xml.bind.*;
 //import javax.xml.stream.*;
-import java.io.FileOutputStream;
 import java.util.Arrays;
-import java.util.List;
-import java.util.zip.GZIPOutputStream;
+
+import com.proto.generated.Classrooms;
+import com.proto.generated.Teacher;
 
 public class App {
 
@@ -63,8 +63,26 @@ public class App {
             System.out.println(o);
 
             // Proto Marshalling
+            ClassTProto clss2 = AddProtoObjects();
+            Classrooms.Builder classrooms = Classrooms.newBuilder();
 
-        } catch (JAXBException e) {
+            for (Teacher t: clss2.tlist){
+                classrooms.addTeachers(t);
+            }
+
+            FileOutputStream output = new FileOutputStream("output\\classroom");
+            classrooms.build().writeTo(output);
+            output.close();
+            System.out.println(classrooms);
+
+            // Proto Unmarshalling
+            Classrooms classr = Classrooms.parseFrom(new FileInputStream("output\\classroom"));
+            System.out.println("\n-------\n");
+            System.out.println(classr);
+
+        } catch (JAXBException | FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -88,39 +106,44 @@ public class App {
         s3.setName("Luis");
         s3.setAge(21);
         s3.setId("201134441210");
-       
 
         clss.setList(Arrays.asList(s1, s2, s3));
 
         return clss;
     }
 
-    private static class AddProtoObjects {
+    private static ClassTProto AddProtoObjects() {
+
+        com.proto.generated.Student s1 = com.proto.generated.Student.newBuilder()
+                .setName("Alberto")
+                .setTelephone(999999999).setGender("male")
+                .setBirthdate("22/22/2222").setAddress("bbb")
+                .build();
+
+        com.proto.generated.Student s2 = com.proto.generated.Student.newBuilder()
+                .setName("Patricia")
+                .setTelephone(888888888).setGender("female")
+                .setBirthdate("33/33/3333").setAddress("ccc")
+                .build();
+
+        com.proto.generated.Student s3 = com.proto.generated.Student.newBuilder()
+                .setName("Luis")
+                .setTelephone(777777777).setGender("male")
+                .setBirthdate("44/44/4444").setAddress("ddd")
+                .build();
 
         com.proto.generated.Teacher t1 = Teacher.newBuilder()
                 .setName("Ricardo")
                 .setTelephone(111111111)
                 .setBirthdate("11/11/1111")
                 .setAddress("aaa")
+                .addStudents(s1).addStudents(s2).addStudents(s3)
                 .build();
 
-        com.proto.generated.Student s1 = com.proto.generated.Student.newBuilder()
-                .setName("Alberto")
-                .setTelephone(999999999).setGender("male")
-                .setBirthdate("22/22/2222").setAddress("bbb")
-                .setTeacher(t1).build();
+        ClassTProto tproto = new ClassTProto();
+        tproto.setStList(Arrays.asList(s1, s2, s3));
+        tproto.setTList(Arrays.asList(t1));
 
-        com.proto.generated.Student s2 = com.proto.generated.Student.newBuilder()
-                .setName("Patricia")
-                .setTelephone(888888888).setGender("female")
-                .setBirthdate("33/33/3333").setAddress("ccc")
-                .setTeacher(t1).build();
-
-        com.proto.generated.Student s3 = com.proto.generated.Student.newBuilder()
-                .setName("Luis")
-                .setTelephone(777777777).setGender("male")
-                .setBirthdate("44/44/4444").setAddress("ddd")
-                .setTeacher(t1).build();
-
+        return tproto;
     }
 }
