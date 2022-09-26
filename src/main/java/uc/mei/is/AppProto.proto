@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package uc.mei.is;
+
+option java_multiple_files = true;
+option java_package = "com.proto.generated";
+option java_outer_classname = "AppProtoOuterClass";
+
+message Student {
+  optional string name = 1;
+  optional string telephone = 2;
+  optional string gender = 3;
+  optional string birthdate = 4;
+  optional string address = 5;
+  optional Teacher teacher = 6;
+  optional string registrationDate = 7;
+}
+
+message Teacher {
+  optional string name = 1;
+  optional string birthdate = 2;
+  optional string telephone = 3;
+  optional string address = 4;
+  repeated Student students = 5;
+}
+
+message Classrooms{
+  repeated Teacher teachers = 1;
+}

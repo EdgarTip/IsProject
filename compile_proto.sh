@@ -1,0 +1,1 @@
+protoc -I=src/main/java/uc/mei/is --java_out=src/main/java src/main/java/uc/mei/is/AppProto.proto
