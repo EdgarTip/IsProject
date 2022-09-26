@@ -14,6 +14,8 @@ import java.io.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -31,6 +33,17 @@ public class App {
         JAXBContext jaxbContext = null;
         try {
 
+            ArrayList<Long> xmlMarshal = new ArrayList<Long>();
+            ArrayList<Long> xmlUnmarshal = new ArrayList<Long>();
+            ArrayList<Long> xmlGZIPMarshal = new ArrayList<Long>();
+            ArrayList<Long> xmlGZIPUnmarshal = new ArrayList<Long>();
+            ArrayList<Long> protoSerialize = new ArrayList<Long>();
+            ArrayList<Long> protoUnserialize = new ArrayList<Long>();
+
+
+
+
+
             Scanner sc =new Scanner(System.in);  
 
             System.out.println("Number professors:");
@@ -39,60 +52,99 @@ public class App {
             int numberStudents = sc.nextInt();
             System.out.println("Number of names per person: ");
             int numberNames = sc.nextInt();
+            System.out.println("Simulation numbers: ");
+            int simulationAmount = sc.nextInt();
 
             sc.close();
             
-            //Create object
-            TwoPair obj = createClassObject(numberProfessors, numberStudents, numberNames);
 
-            ClassT clss = obj.getClss();
-            ClassTProto tProto = obj.getTproto();
 
-            jaxbContext = org.eclipse.persistence.jaxb.JAXBContextFactory.createContext(new Class[] {ClassT.class}, null);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            for(int i = 0; i < simulationAmount; i++){
+                //Create object
+                TwoPair obj = createClassObject(numberProfessors, numberStudents, numberNames);
 
-            //Serialize
-            serializeXML("simplejaxb\\output\\xmlNoComp.xml", clss, jaxbMarshaller);
+                ClassT clss = obj.getClss();
+                ClassTProto tProto = obj.getTproto();
 
-            //Decerialize
-            File file = new File("simplejaxb\\output\\xmlNoComp.xml");    
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            unserializeXML(file, jaxbUnmarshaller);
+                jaxbContext = org.eclipse.persistence.jaxb.JAXBContextFactory.createContext(new Class[] {ClassT.class}, null);
+                Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+                jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+                //Serialize
+                xmlMarshal.add(serializeXML("simplejaxb\\output\\xmlNoComp.xml", clss, jaxbMarshaller));
+
+                //Unserialize
+                File file = new File("simplejaxb\\output\\xmlNoComp.xml");    
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                xmlUnmarshal.add((unserializeXML(file, jaxbUnmarshaller)));
+                
+                //Serialize with Gzip compression
+                xmlGZIPMarshal.add(serializeXMLGzip(clss, jaxbMarshaller, "simplejaxb\\output\\xmlNoComp.xml", "simplejaxb\\output\\xmlGzip.xml"));
+
+                //Unserialize with Gzip compression
+                xmlGZIPUnmarshal.add(unserializeXMLGzip("simplejaxb\\output\\xmlGzip.xml", "simplejaxb\\output\\xmlGzipRemade.xml"));
+
+                //Serialize Proto
+                protoSerialize.add(serializeProto("simplejaxb\\output\\classroom",tProto));
+                
+                //Unserialize Proto
+                protoUnserialize.add(unserializeProto("simplejaxb\\output\\classroom"));
             
-            //Serialize with Gzip compression
-            serializeXMLGzip(file, "simplejaxb\\output\\xmlGzip.xml");
+            }
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd-HH-mm-ss");
+            LocalDateTime now = LocalDateTime.now();
 
-            //Unserialize with Gzip compression
-            unserializeXMLGzip("simplejaxb\\output\\xmlGzip.xml", "simplejaxb\\output\\xmlGzipRemade.xml");
-
-            //Serialize Proto
-            serializeProto("simplejaxb\\output\\classroom",tProto);
-            
-            //Unserialize Proto
-            unserializeProto("simplejaxb\\output\\classroom");
+            new File("simplejaxb\\output\\results\\" + dtf.format(now)).mkdirs();
+            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\xmlMarshal.txt", xmlMarshal);
+            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\ xmlUnmarshal.txt", xmlUnmarshal);
+            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\xmlGZIPMarshal.txt", xmlGZIPMarshal);
+            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
+            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\protoSerialize.txt", protoSerialize);
+            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\protoUnserialize.txt", protoUnserialize);
 
         } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
+    private static void writeFile(String filePath, ArrayList<Long> list) throws IOException{
+        FileWriter writer = new FileWriter(filePath); 
+            for(Long str: list) {
+                writer.write(str + System.lineSeparator());
+            }
+            writer.close();
+    }
     //Serializes a XML file without compression
-    private static void serializeXML(String filePath, ClassT clss, Marshaller jaxbMarshaller){
+    private static long serializeXML(String filePath, ClassT clss, Marshaller jaxbMarshaller){
+        long elapsedTime = 0;
         try {
+            long start = System.currentTimeMillis();
+            
             jaxbMarshaller.marshal(clss, new File(filePath));
             
+            long end = System.currentTimeMillis();
+            elapsedTime = end - start;
         } catch (JAXBException e) {
             e.printStackTrace();
         }
+        return elapsedTime;
     }
 
     //Unserializes a XML file. Result can be confirmed by removing the comment around the foreach loop
-    private static void unserializeXML(File file,  Unmarshaller jaxbUnmarshaller){
+    private static long unserializeXML(File file,  Unmarshaller jaxbUnmarshaller){
         //Unserialize
+        long elapsedTime = 0;
         try {
+            long start = System.currentTimeMillis();
+            // some time passes
+            
             ClassT clss = (ClassT) jaxbUnmarshaller.unmarshal(file);
+            long end = System.currentTimeMillis();
+            elapsedTime = end - start;
+            
             
             //Verifying if output is correct
             /* 
@@ -103,11 +155,13 @@ public class App {
         } catch (JAXBException e) {
             e.printStackTrace();
         }
+        return elapsedTime;
     }
 
-    private static void serializeProto(String filePath, ClassTProto tproto){
+    private static long serializeProto(String filePath, ClassTProto tproto){
         // Proto Marshalling
         //ClassTProto clss2 = AddProtoObjects();
+        long elapsedTime = 0;
         Classrooms.Builder classrooms = Classrooms.newBuilder();
 
         for (Teacher t: tproto.tlist){
@@ -117,36 +171,54 @@ public class App {
         FileOutputStream output;
         try {
             output = new FileOutputStream(filePath);
+
+            long start = System.currentTimeMillis();
             classrooms.build().writeTo(output);
+            long end = System.currentTimeMillis();
+            elapsedTime = end - start;
+            
             output.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return elapsedTime;
         //System.out.println(classrooms);
     }
     
-    private static void unserializeProto(String filePath){
+    private static long unserializeProto(String filePath){
         // Proto Unmarshalling
+        long elapsedTime = 0;
         Classrooms classr;
         try {
+            long start = System.currentTimeMillis();
             classr = Classrooms.parseFrom(new FileInputStream(filePath));
+            long end = System.currentTimeMillis();
+            elapsedTime = end - start;
+
             //System.out.println("\n-------\n");
-            System.out.println(classr);
+            //System.out.println(classr);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return elapsedTime;
         
     }
     //Serializes a file compressing it with Gzip
-    private static void serializeXMLGzip(File file, String filePath){
+    private static long serializeXMLGzip(ClassT clss, Marshaller jaxbMarshaller, String filePath, String outputPath){
         byte[] buffer = new byte[1024];
- 
+        
+        long elapsedTime = 0; 
         try {
-             
-            FileOutputStream fileOutputStream =new FileOutputStream(filePath);
+
+            long start = System.currentTimeMillis();
+
+            jaxbMarshaller.marshal(clss, new File(filePath));
+
+            File file = new File(filePath);    
+
+            FileOutputStream fileOutputStream =new FileOutputStream(outputPath);
  
             GZIPOutputStream gzipOuputStream = new GZIPOutputStream(fileOutputStream);
  
@@ -157,7 +229,9 @@ public class App {
             while ((bytes_read = fileInput.read(buffer)) > 0) {
                 gzipOuputStream.write(buffer, 0, bytes_read);
             }
- 
+            
+            long end = System.currentTimeMillis();
+            elapsedTime = end - start;
             fileInput.close();
  
             gzipOuputStream.finish();
@@ -166,30 +240,42 @@ public class App {
  
         } catch (IOException ex) {
             ex.printStackTrace();
+        } catch (JAXBException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+        return elapsedTime;
     }
 
     //Unserealize a file that was compressed using Gzip
-    private static void unserializeXMLGzip(String filepath, String newFile){
+    private static long unserializeXMLGzip(String filepath, String newFile){
+        long elapsedTime = 0; 
         try {
+            
             FileInputStream fis = new FileInputStream(filepath);
             GZIPInputStream gis = new GZIPInputStream(fis);
             FileOutputStream fos = new FileOutputStream(newFile);
 
             byte[] buffer = new byte[1024];
             int len;
+            long start = System.currentTimeMillis();
             while((len = gis.read(buffer)) != -1){
                 fos.write(buffer, 0, len);
             }
 
+            long end = System.currentTimeMillis();
+            elapsedTime = end - start;
+
+            
             fos.close();
             gis.close();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return elapsedTime;
     }
-    
-    
     
     /*Populate an XML with data. The structure is the following:
 
@@ -321,42 +407,6 @@ public class App {
         return obj;
     }
 
-    /*private static ClassTProto AddProtoObjects() {
-
-        com.proto.generated.Student s1 = com.proto.generated.Student.newBuilder()
-                .setName("Alberto")
-                .setTelephone(999999999).setGender("male")
-                .setBirthdate("22/22/2222").setAddress("bbb")
-                .build();
-
-        com.proto.generated.Student s2 = com.proto.generated.Student.newBuilder()
-                .setName("Patricia")
-                .setTelephone(888888888).setGender("female")
-                .setBirthdate("33/33/3333").setAddress("ccc")
-                .build();
-
-        com.proto.generated.Student s3 = com.proto.generated.Student.newBuilder()
-                .setName("Luis")
-                .setTelephone(777777777).setGender("male")
-                .setBirthdate("44/44/4444").setAddress("ddd")
-                .build();
-
-        com.proto.generated.Teacher t1 = Teacher.newBuilder()
-                .setName("Ricardo")
-                .setTelephone(111111111)
-                .setBirthdate("11/11/1111")
-                .setAddress("aaa")
-                .addStudents(s1).addStudents(s2).addStudents(s3)
-                
-                .build();
-
-        ClassTProto tproto = new ClassTProto();
-        tproto.setStList(Arrays.asList(s1, s2, s3));
-        tproto.setTList(Arrays.asList(t1));
-
-        return tproto;
-    }*/
-
     //Creates a new student object
     public static Student createStudent(String name, String address, String gender, String telephone, String id, String date, String date2){
         return new Student(id, name, telephone, address, date, date2, gender);
@@ -366,9 +416,6 @@ public class App {
     public static Professor createProfessor(String name, String address, String id, String telephone, String date){
         return new Professor(id, name, telephone, address, date);
     }
-
-
-
 
     //Creates a random birthdate
     public static String randomDate() {
