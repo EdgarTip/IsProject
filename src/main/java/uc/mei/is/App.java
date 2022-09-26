@@ -43,7 +43,10 @@ public class App {
             sc.close();
             
             //Create object
-            ClassT clss = createClassObject(numberProfessors, numberStudents, numberNames);
+            TwoPair obj = createClassObject(numberProfessors, numberStudents, numberNames);
+
+            ClassT clss = obj.getClss();
+            ClassTProto tProto = obj.getTproto();
 
             jaxbContext = org.eclipse.persistence.jaxb.JAXBContextFactory.createContext(new Class[] {ClassT.class}, null);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -62,8 +65,12 @@ public class App {
 
             //Unserialize with Gzip compression
             unserializeXMLGzip("simplejaxb\\output\\xmlGzip.xml", "simplejaxb\\output\\xmlGzipRemade.xml");
+
+            //Serialize Proto
+            serializeProto("simplejaxb\\output\\classroom",tProto);
             
-            
+            //Unserialize Proto
+            unserializeProto("simplejaxb\\output\\classroom");
 
         } catch (JAXBException e) {
             e.printStackTrace();
@@ -98,18 +105,18 @@ public class App {
         }
     }
 
-    private static void serializeProto(String filePath){
+    private static void serializeProto(String filePath, ClassTProto tproto){
         // Proto Marshalling
-        ClassTProto clss2 = AddProtoObjects();
+        //ClassTProto clss2 = AddProtoObjects();
         Classrooms.Builder classrooms = Classrooms.newBuilder();
 
-        for (Teacher t: clss2.tlist){
+        for (Teacher t: tproto.tlist){
             classrooms.addTeachers(t);
         }
 
         FileOutputStream output;
         try {
-            output = new FileOutputStream("output\\classroom");
+            output = new FileOutputStream(filePath);
             classrooms.build().writeTo(output);
             output.close();
         } catch (IOException e) {
@@ -123,9 +130,9 @@ public class App {
         // Proto Unmarshalling
         Classrooms classr;
         try {
-            classr = Classrooms.parseFrom(new FileInputStream("output\\classroom"));
+            classr = Classrooms.parseFrom(new FileInputStream(filePath));
             //System.out.println("\n-------\n");
-            //System.out.println(classr);
+            System.out.println(classr);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -200,13 +207,16 @@ public class App {
         </class>
     
     */
-    private static ClassT createClassObject(int numberProfessors, int numberStudents, int numberNames) {
+    private static TwoPair createClassObject(int numberProfessors, int numberStudents, int numberNames) {
         
         //Get random information from text files
         Scanner s;
+        ClassTProto tproto = new ClassTProto();
         ArrayList<String> firstNamesList = new ArrayList<String>();
         ArrayList<String> middleNamesList = new ArrayList<String>();
         ArrayList<String> addressesList = new ArrayList<String>();
+        ArrayList<com.proto.generated.Student> studentList = new ArrayList<com.proto.generated.Student>();
+        ArrayList<com.proto.generated.Teacher> teacherList = new ArrayList<com.proto.generated.Teacher>();
         try {
             s = new Scanner(new File("simplejaxb\\src\\main\\java\\uc\\mei\\is\\files\\firstNames.txt"));
 
@@ -240,7 +250,7 @@ public class App {
             Random random = new Random();
             int randomIndex = random.nextInt(firstNamesList.size());
             professorName += firstNamesList.get(randomIndex);
-            
+
 
             for(int k = 0; k < numberNames - 1; k++){
                 int randomIndex2 = random.nextInt(middleNamesList.size());
@@ -251,9 +261,14 @@ public class App {
             int randomIndex3 = random.nextInt(addressesList.size());
             address += addressesList.get(randomIndex3);
             
-            Professor prof = createProfessor(professorName, address);
+            String professorId = randomId();
+            String professorTelephone = randomTelephoneNumber();
+            String professorBirthDate = randomDate();
+            Professor prof = createProfessor(professorName, address, professorId, professorTelephone, professorBirthDate);
             
             clss.addProfessor(prof);
+
+            ArrayList<com.proto.generated.Student> students = new ArrayList<com.proto.generated.Student>();
 
             for(int j = 0; j < numberStudents; j++){
                 String studentName = "";
@@ -270,18 +285,43 @@ public class App {
                 int randomIndex6 = random.nextInt(addressesList.size());
                 studentAddress += addressesList.get(randomIndex6);
                 
-                Student stud = createStudent(studentName, studentAddress, "male");
+                String id = randomId();
+                String telephone = randomTelephoneNumber();
+                String date = randomDate();
+                String date2 = randomDate();
+                Student stud = createStudent(studentName, studentAddress, "male", telephone, id, date, date2);
+                
+                com.proto.generated.Student s1 = com.proto.generated.Student.newBuilder()
+                .setName(studentName)
+                .setTelephone(telephone).setGender("male")
+                .setBirthdate(date).setAddress(address).setRegistrationDate(date2)
+                .build();
+
+                students.add(s1);
+                studentList.add(s1);
 
                 prof.addStudent(stud);
             }
+
+            com.proto.generated.Teacher t1 = Teacher.newBuilder()
+                .setName(professorName)
+                .setTelephone(professorTelephone)
+                .setBirthdate(professorBirthDate)
+                .setAddress(address)
+                .addAllStudents(students).build();
+
+            teacherList.add(t1);
         }
-        
+
+        tproto.setStList(studentList);
+        tproto.setTList(teacherList);
+        TwoPair obj = new TwoPair(clss, tproto);
 
 
-        return clss;
+        return obj;
     }
 
-    private static ClassTProto AddProtoObjects() {
+    /*private static ClassTProto AddProtoObjects() {
 
         com.proto.generated.Student s1 = com.proto.generated.Student.newBuilder()
                 .setName("Alberto")
@@ -307,6 +347,7 @@ public class App {
                 .setBirthdate("11/11/1111")
                 .setAddress("aaa")
                 .addStudents(s1).addStudents(s2).addStudents(s3)
+                
                 .build();
 
         ClassTProto tproto = new ClassTProto();
@@ -314,16 +355,16 @@ public class App {
         tproto.setTList(Arrays.asList(t1));
 
         return tproto;
-    }
+    }*/
 
     //Creates a new student object
-    public static Student createStudent(String name, String address, String gender){
-        return new Student(randomId(), name, randomTelephoneNumber(), address, randomDate(), randomDate(), gender);
+    public static Student createStudent(String name, String address, String gender, String telephone, String id, String date, String date2){
+        return new Student(id, name, telephone, address, date, date2, gender);
     }
 
     //Creates a new professor object
-    public static Professor createProfessor(String name, String address){
-        return new Professor(randomId(), name, randomTelephoneNumber(), address, randomDate());
+    public static Professor createProfessor(String name, String address, String id, String telephone, String date){
+        return new Professor(id, name, telephone, address, date);
     }
 
 

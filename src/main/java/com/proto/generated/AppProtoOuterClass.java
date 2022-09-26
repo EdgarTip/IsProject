@@ -38,16 +38,17 @@ public final class AppProtoOuterClass {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\016AppProto.proto\022\tuc.mei.is\"\203\001\n\007Student\022" +
-      "\014\n\004name\030\001 \001(\t\022\021\n\ttelephone\030\002 \001(\003\022\016\n\006gend" +
+      "\n\016AppProto.proto\022\tuc.mei.is\"\235\001\n\007Student\022" +
+      "\014\n\004name\030\001 \001(\t\022\021\n\ttelephone\030\002 \001(\t\022\016\n\006gend" +
       "er\030\003 \001(\t\022\021\n\tbirthdate\030\004 \001(\t\022\017\n\007address\030\005" +
       " \001(\t\022#\n\007teacher\030\006 \001(\0132\022.uc.mei.is.Teache" +
-      "r\"t\n\007Teacher\022$\n\010students\030\001 \003(\0132\022.uc.mei." +
-      "is.Student\022\014\n\004name\030\002 \001(\t\022\021\n\tbirthdate\030\003 " +
-      "\001(\t\022\021\n\ttelephone\030\004 \001(\005\022\017\n\007address\030\005 \001(\t\"" +
-      "2\n\nClassrooms\022$\n\010teachers\030\001 \003(\0132\022.uc.mei" +
-      ".is.TeacherB+\n\023com.proto.generatedB\022AppP" +
-      "rotoOuterClassP\001"
+      "r\022\030\n\020registrationDate\030\007 \001(\t\"t\n\007Teacher\022\014" +
+      "\n\004name\030\001 \001(\t\022\021\n\tbirthdate\030\002 \001(\t\022\021\n\ttelep" +
+      "hone\030\003 \001(\t\022\017\n\007address\030\004 \001(\t\022$\n\010students\030" +
+      "\005 \003(\0132\022.uc.mei.is.Student\"2\n\nClassrooms\022" +
+      "$\n\010teachers\030\001 \003(\0132\022.uc.mei.is.TeacherB+\n" +
+      "\023com.proto.generatedB\022AppProtoOuterClass" +
+      "P\001"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -58,13 +59,13 @@ public final class AppProtoOuterClass {
     internal_static_uc_mei_is_Student_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_uc_mei_is_Student_descriptor,
-        new java.lang.String[] { "Name", "Telephone", "Gender", "Birthdate", "Address", "Teacher", });
+        new java.lang.String[] { "Name", "Telephone", "Gender", "Birthdate", "Address", "Teacher", "RegistrationDate", });
     internal_static_uc_mei_is_Teacher_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_uc_mei_is_Teacher_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_uc_mei_is_Teacher_descriptor,
-        new java.lang.String[] { "Students", "Name", "Birthdate", "Telephone", "Address", });
+        new java.lang.String[] { "Name", "Birthdate", "Telephone", "Address", "Students", });
     internal_static_uc_mei_is_Classrooms_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_uc_mei_is_Classrooms_fieldAccessorTable = new

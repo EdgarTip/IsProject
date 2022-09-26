@@ -8,88 +8,94 @@ public interface TeacherOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>repeated .uc.mei.is.Student students = 1;</code>
-   */
-  java.util.List<com.proto.generated.Student> 
-      getStudentsList();
-  /**
-   * <code>repeated .uc.mei.is.Student students = 1;</code>
-   */
-  com.proto.generated.Student getStudents(int index);
-  /**
-   * <code>repeated .uc.mei.is.Student students = 1;</code>
-   */
-  int getStudentsCount();
-  /**
-   * <code>repeated .uc.mei.is.Student students = 1;</code>
-   */
-  java.util.List<? extends com.proto.generated.StudentOrBuilder> 
-      getStudentsOrBuilderList();
-  /**
-   * <code>repeated .uc.mei.is.Student students = 1;</code>
-   */
-  com.proto.generated.StudentOrBuilder getStudentsOrBuilder(
-      int index);
-
-  /**
-   * <code>optional string name = 2;</code>
+   * <code>optional string name = 1;</code>
    * @return Whether the name field is set.
    */
   boolean hasName();
   /**
-   * <code>optional string name = 2;</code>
+   * <code>optional string name = 1;</code>
    * @return The name.
    */
   java.lang.String getName();
   /**
-   * <code>optional string name = 2;</code>
+   * <code>optional string name = 1;</code>
    * @return The bytes for name.
    */
   com.google.protobuf.ByteString
       getNameBytes();
 
   /**
-   * <code>optional string birthdate = 3;</code>
+   * <code>optional string birthdate = 2;</code>
    * @return Whether the birthdate field is set.
    */
   boolean hasBirthdate();
   /**
-   * <code>optional string birthdate = 3;</code>
+   * <code>optional string birthdate = 2;</code>
    * @return The birthdate.
    */
   java.lang.String getBirthdate();
   /**
-   * <code>optional string birthdate = 3;</code>
+   * <code>optional string birthdate = 2;</code>
    * @return The bytes for birthdate.
    */
   com.google.protobuf.ByteString
       getBirthdateBytes();
 
   /**
-   * <code>optional int32 telephone = 4;</code>
+   * <code>optional string telephone = 3;</code>
    * @return Whether the telephone field is set.
    */
   boolean hasTelephone();
   /**
-   * <code>optional int32 telephone = 4;</code>
+   * <code>optional string telephone = 3;</code>
    * @return The telephone.
    */
-  int getTelephone();
+  java.lang.String getTelephone();
+  /**
+   * <code>optional string telephone = 3;</code>
+   * @return The bytes for telephone.
+   */
+  com.google.protobuf.ByteString
+      getTelephoneBytes();
 
   /**
-   * <code>optional string address = 5;</code>
+   * <code>optional string address = 4;</code>
    * @return Whether the address field is set.
    */
   boolean hasAddress();
   /**
-   * <code>optional string address = 5;</code>
+   * <code>optional string address = 4;</code>
    * @return The address.
    */
   java.lang.String getAddress();
   /**
-   * <code>optional string address = 5;</code>
+   * <code>optional string address = 4;</code>
    * @return The bytes for address.
    */
   com.google.protobuf.ByteString
       getAddressBytes();
+
+  /**
+   * <code>repeated .uc.mei.is.Student students = 5;</code>
+   */
+  java.util.List<com.proto.generated.Student> 
+      getStudentsList();
+  /**
+   * <code>repeated .uc.mei.is.Student students = 5;</code>
+   */
+  com.proto.generated.Student getStudents(int index);
+  /**
+   * <code>repeated .uc.mei.is.Student students = 5;</code>
+   */
+  int getStudentsCount();
+  /**
+   * <code>repeated .uc.mei.is.Student students = 5;</code>
+   */
+  java.util.List<? extends com.proto.generated.StudentOrBuilder> 
+      getStudentsOrBuilderList();
+  /**
+   * <code>repeated .uc.mei.is.Student students = 5;</code>
+   */
+  com.proto.generated.StudentOrBuilder getStudentsOrBuilder(
+      int index);
 }

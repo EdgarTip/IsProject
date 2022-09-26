@@ -17,9 +17,11 @@ private static final long serialVersionUID = 0L;
   }
   private Student() {
     name_ = "";
+    telephone_ = "";
     gender_ = "";
     birthdate_ = "";
     address_ = "";
+    registrationDate_ = "";
   }
 
   @java.lang.Override
@@ -59,9 +61,10 @@ private static final long serialVersionUID = 0L;
             name_ = bs;
             break;
           }
-          case 16: {
+          case 18: {
+            com.google.protobuf.ByteString bs = input.readBytes();
             bitField0_ |= 0x00000002;
-            telephone_ = input.readInt64();
+            telephone_ = bs;
             break;
           }
           case 26: {
@@ -93,6 +96,12 @@ private static final long serialVersionUID = 0L;
               teacher_ = subBuilder.buildPartial();
             }
             bitField0_ |= 0x00000020;
+            break;
+          }
+          case 58: {
+            com.google.protobuf.ByteString bs = input.readBytes();
+            bitField0_ |= 0x00000040;
+            registrationDate_ = bs;
             break;
           }
           default: {
@@ -179,9 +188,9 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int TELEPHONE_FIELD_NUMBER = 2;
-  private long telephone_;
+  private volatile java.lang.Object telephone_;
   /**
-   * <code>optional int64 telephone = 2;</code>
+   * <code>optional string telephone = 2;</code>
    * @return Whether the telephone field is set.
    */
   @java.lang.Override
@@ -189,12 +198,41 @@ private static final long serialVersionUID = 0L;
     return ((bitField0_ & 0x00000002) != 0);
   }
   /**
-   * <code>optional int64 telephone = 2;</code>
+   * <code>optional string telephone = 2;</code>
    * @return The telephone.
    */
   @java.lang.Override
-  public long getTelephone() {
-    return telephone_;
+  public java.lang.String getTelephone() {
+    java.lang.Object ref = telephone_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      if (bs.isValidUtf8()) {
+        telephone_ = s;
+      }
+      return s;
+    }
+  }
+  /**
+   * <code>optional string telephone = 2;</code>
+   * @return The bytes for telephone.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getTelephoneBytes() {
+    java.lang.Object ref = telephone_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      telephone_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
   public static final int GENDER_FIELD_NUMBER = 3;
@@ -367,6 +405,54 @@ private static final long serialVersionUID = 0L;
     return teacher_ == null ? com.proto.generated.Teacher.getDefaultInstance() : teacher_;
   }
 
+  public static final int REGISTRATIONDATE_FIELD_NUMBER = 7;
+  private volatile java.lang.Object registrationDate_;
+  /**
+   * <code>optional string registrationDate = 7;</code>
+   * @return Whether the registrationDate field is set.
+   */
+  @java.lang.Override
+  public boolean hasRegistrationDate() {
+    return ((bitField0_ & 0x00000040) != 0);
+  }
+  /**
+   * <code>optional string registrationDate = 7;</code>
+   * @return The registrationDate.
+   */
+  @java.lang.Override
+  public java.lang.String getRegistrationDate() {
+    java.lang.Object ref = registrationDate_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      if (bs.isValidUtf8()) {
+        registrationDate_ = s;
+      }
+      return s;
+    }
+  }
+  /**
+   * <code>optional string registrationDate = 7;</code>
+   * @return The bytes for registrationDate.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getRegistrationDateBytes() {
+    java.lang.Object ref = registrationDate_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      registrationDate_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -385,7 +471,7 @@ private static final long serialVersionUID = 0L;
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
     }
     if (((bitField0_ & 0x00000002) != 0)) {
-      output.writeInt64(2, telephone_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, telephone_);
     }
     if (((bitField0_ & 0x00000004) != 0)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, gender_);
@@ -398,6 +484,9 @@ private static final long serialVersionUID = 0L;
     }
     if (((bitField0_ & 0x00000020) != 0)) {
       output.writeMessage(6, getTeacher());
+    }
+    if (((bitField0_ & 0x00000040) != 0)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 7, registrationDate_);
     }
     unknownFields.writeTo(output);
   }
@@ -412,8 +501,7 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
     }
     if (((bitField0_ & 0x00000002) != 0)) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(2, telephone_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, telephone_);
     }
     if (((bitField0_ & 0x00000004) != 0)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, gender_);
@@ -427,6 +515,9 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000020) != 0)) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(6, getTeacher());
+    }
+    if (((bitField0_ & 0x00000040) != 0)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, registrationDate_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -450,8 +541,8 @@ private static final long serialVersionUID = 0L;
     }
     if (hasTelephone() != other.hasTelephone()) return false;
     if (hasTelephone()) {
-      if (getTelephone()
-          != other.getTelephone()) return false;
+      if (!getTelephone()
+          .equals(other.getTelephone())) return false;
     }
     if (hasGender() != other.hasGender()) return false;
     if (hasGender()) {
@@ -473,6 +564,11 @@ private static final long serialVersionUID = 0L;
       if (!getTeacher()
           .equals(other.getTeacher())) return false;
     }
+    if (hasRegistrationDate() != other.hasRegistrationDate()) return false;
+    if (hasRegistrationDate()) {
+      if (!getRegistrationDate()
+          .equals(other.getRegistrationDate())) return false;
+    }
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -490,8 +586,7 @@ private static final long serialVersionUID = 0L;
     }
     if (hasTelephone()) {
       hash = (37 * hash) + TELEPHONE_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getTelephone());
+      hash = (53 * hash) + getTelephone().hashCode();
     }
     if (hasGender()) {
       hash = (37 * hash) + GENDER_FIELD_NUMBER;
@@ -508,6 +603,10 @@ private static final long serialVersionUID = 0L;
     if (hasTeacher()) {
       hash = (37 * hash) + TEACHER_FIELD_NUMBER;
       hash = (53 * hash) + getTeacher().hashCode();
+    }
+    if (hasRegistrationDate()) {
+      hash = (37 * hash) + REGISTRATIONDATE_FIELD_NUMBER;
+      hash = (53 * hash) + getRegistrationDate().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -645,7 +744,7 @@ private static final long serialVersionUID = 0L;
       super.clear();
       name_ = "";
       bitField0_ = (bitField0_ & ~0x00000001);
-      telephone_ = 0L;
+      telephone_ = "";
       bitField0_ = (bitField0_ & ~0x00000002);
       gender_ = "";
       bitField0_ = (bitField0_ & ~0x00000004);
@@ -659,6 +758,8 @@ private static final long serialVersionUID = 0L;
         teacherBuilder_.clear();
       }
       bitField0_ = (bitField0_ & ~0x00000020);
+      registrationDate_ = "";
+      bitField0_ = (bitField0_ & ~0x00000040);
       return this;
     }
 
@@ -692,9 +793,9 @@ private static final long serialVersionUID = 0L;
       }
       result.name_ = name_;
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.telephone_ = telephone_;
         to_bitField0_ |= 0x00000002;
       }
+      result.telephone_ = telephone_;
       if (((from_bitField0_ & 0x00000004) != 0)) {
         to_bitField0_ |= 0x00000004;
       }
@@ -715,6 +816,10 @@ private static final long serialVersionUID = 0L;
         }
         to_bitField0_ |= 0x00000020;
       }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        to_bitField0_ |= 0x00000040;
+      }
+      result.registrationDate_ = registrationDate_;
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -770,7 +875,9 @@ private static final long serialVersionUID = 0L;
         onChanged();
       }
       if (other.hasTelephone()) {
-        setTelephone(other.getTelephone());
+        bitField0_ |= 0x00000002;
+        telephone_ = other.telephone_;
+        onChanged();
       }
       if (other.hasGender()) {
         bitField0_ |= 0x00000004;
@@ -789,6 +896,11 @@ private static final long serialVersionUID = 0L;
       }
       if (other.hasTeacher()) {
         mergeTeacher(other.getTeacher());
+      }
+      if (other.hasRegistrationDate()) {
+        bitField0_ |= 0x00000040;
+        registrationDate_ = other.registrationDate_;
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -904,41 +1016,86 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long telephone_ ;
+    private java.lang.Object telephone_ = "";
     /**
-     * <code>optional int64 telephone = 2;</code>
+     * <code>optional string telephone = 2;</code>
      * @return Whether the telephone field is set.
      */
-    @java.lang.Override
     public boolean hasTelephone() {
       return ((bitField0_ & 0x00000002) != 0);
     }
     /**
-     * <code>optional int64 telephone = 2;</code>
+     * <code>optional string telephone = 2;</code>
      * @return The telephone.
      */
-    @java.lang.Override
-    public long getTelephone() {
-      return telephone_;
+    public java.lang.String getTelephone() {
+      java.lang.Object ref = telephone_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          telephone_ = s;
+        }
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
-     * <code>optional int64 telephone = 2;</code>
+     * <code>optional string telephone = 2;</code>
+     * @return The bytes for telephone.
+     */
+    public com.google.protobuf.ByteString
+        getTelephoneBytes() {
+      java.lang.Object ref = telephone_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        telephone_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string telephone = 2;</code>
      * @param value The telephone to set.
      * @return This builder for chaining.
      */
-    public Builder setTelephone(long value) {
-      bitField0_ |= 0x00000002;
+    public Builder setTelephone(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
       telephone_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>optional int64 telephone = 2;</code>
+     * <code>optional string telephone = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearTelephone() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      telephone_ = 0L;
+      telephone_ = getDefaultInstance().getTelephone();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string telephone = 2;</code>
+     * @param value The bytes for telephone to set.
+     * @return This builder for chaining.
+     */
+    public Builder setTelephoneBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+      telephone_ = value;
       onChanged();
       return this;
     }
@@ -1313,6 +1470,90 @@ private static final long serialVersionUID = 0L;
         teacher_ = null;
       }
       return teacherBuilder_;
+    }
+
+    private java.lang.Object registrationDate_ = "";
+    /**
+     * <code>optional string registrationDate = 7;</code>
+     * @return Whether the registrationDate field is set.
+     */
+    public boolean hasRegistrationDate() {
+      return ((bitField0_ & 0x00000040) != 0);
+    }
+    /**
+     * <code>optional string registrationDate = 7;</code>
+     * @return The registrationDate.
+     */
+    public java.lang.String getRegistrationDate() {
+      java.lang.Object ref = registrationDate_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          registrationDate_ = s;
+        }
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>optional string registrationDate = 7;</code>
+     * @return The bytes for registrationDate.
+     */
+    public com.google.protobuf.ByteString
+        getRegistrationDateBytes() {
+      java.lang.Object ref = registrationDate_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        registrationDate_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>optional string registrationDate = 7;</code>
+     * @param value The registrationDate to set.
+     * @return This builder for chaining.
+     */
+    public Builder setRegistrationDate(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+      registrationDate_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string registrationDate = 7;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearRegistrationDate() {
+      bitField0_ = (bitField0_ & ~0x00000040);
+      registrationDate_ = getDefaultInstance().getRegistrationDate();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>optional string registrationDate = 7;</code>
+     * @param value The bytes for registrationDate to set.
+     * @return This builder for chaining.
+     */
+    public Builder setRegistrationDateBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+      registrationDate_ = value;
+      onChanged();
+      return this;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

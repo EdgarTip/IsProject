@@ -25,15 +25,21 @@ public interface StudentOrBuilder extends
       getNameBytes();
 
   /**
-   * <code>optional int64 telephone = 2;</code>
+   * <code>optional string telephone = 2;</code>
    * @return Whether the telephone field is set.
    */
   boolean hasTelephone();
   /**
-   * <code>optional int64 telephone = 2;</code>
+   * <code>optional string telephone = 2;</code>
    * @return The telephone.
    */
-  long getTelephone();
+  java.lang.String getTelephone();
+  /**
+   * <code>optional string telephone = 2;</code>
+   * @return The bytes for telephone.
+   */
+  com.google.protobuf.ByteString
+      getTelephoneBytes();
 
   /**
    * <code>optional string gender = 3;</code>
@@ -100,4 +106,21 @@ public interface StudentOrBuilder extends
    * <code>optional .uc.mei.is.Teacher teacher = 6;</code>
    */
   com.proto.generated.TeacherOrBuilder getTeacherOrBuilder();
+
+  /**
+   * <code>optional string registrationDate = 7;</code>
+   * @return Whether the registrationDate field is set.
+   */
+  boolean hasRegistrationDate();
+  /**
+   * <code>optional string registrationDate = 7;</code>
+   * @return The registrationDate.
+   */
+  java.lang.String getRegistrationDate();
+  /**
+   * <code>optional string registrationDate = 7;</code>
+   * @return The bytes for registrationDate.
+   */
+  com.google.protobuf.ByteString
+      getRegistrationDateBytes();
 }
