@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import com.proto.generated.Classrooms;
 import com.proto.generated.Teacher;
@@ -92,37 +93,46 @@ public class App {
                 System.out.println("Stud name: " + stud.getName() + "|Id: " + stud.getAge());
             }*/
 
-            // XML Unmarshalling
-            File file = new File("output\\fruit.xml");    
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            ClassT o = (ClassT) jaxbUnmarshaller.unmarshal(file);
-            System.out.println(o);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Proto Marshalling
-            ClassTProto clss2 = AddProtoObjects();
-            Classrooms.Builder classrooms = Classrooms.newBuilder();
+    private static void serializeProto(String filePath){
+        // Proto Marshalling
+        ClassTProto clss2 = AddProtoObjects();
+        Classrooms.Builder classrooms = Classrooms.newBuilder();
 
-            for (Teacher t: clss2.tlist){
-                classrooms.addTeachers(t);
-            }
+        for (Teacher t: clss2.tlist){
+            classrooms.addTeachers(t);
+        }
 
-            FileOutputStream output = new FileOutputStream("output\\classroom");
+        FileOutputStream output;
+        try {
+            output = new FileOutputStream("output\\classroom");
             classrooms.build().writeTo(output);
             output.close();
-            System.out.println(classrooms);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            // Proto Unmarshalling
-            Classrooms classr = Classrooms.parseFrom(new FileInputStream("output\\classroom"));
-            System.out.println("\n-------\n");
-            System.out.println(classr);
-
-        } catch (JAXBException | FileNotFoundException e) {
+        //System.out.println(classrooms);
+    }
+    
+    private static void unserializeProto(String filePath){
+        // Proto Unmarshalling
+        Classrooms classr;
+        try {
+            classr = Classrooms.parseFrom(new FileInputStream("output\\classroom"));
+            //System.out.println("\n-------\n");
+            //System.out.println(classr);
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
     }
-    
     //Serializes a file compressing it with Gzip
     private static void serializeXMLGzip(File file, String filePath){
         byte[] buffer = new byte[1024];
@@ -230,6 +240,7 @@ public class App {
             Random random = new Random();
             int randomIndex = random.nextInt(firstNamesList.size());
             professorName += firstNamesList.get(randomIndex);
+            
 
             for(int k = 0; k < numberNames - 1; k++){
                 int randomIndex2 = random.nextInt(middleNamesList.size());
