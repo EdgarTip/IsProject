@@ -94,13 +94,14 @@ public class App {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd-HH-mm-ss");
             LocalDateTime now = LocalDateTime.now();
 
-            new File("simplejaxb\\output\\results\\" + dtf.format(now)).mkdirs();
-            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\xmlMarshal.txt", xmlMarshal);
-            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\ xmlUnmarshal.txt", xmlUnmarshal);
-            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\xmlGZIPMarshal.txt", xmlGZIPMarshal);
-            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
-            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\protoSerialize.txt", protoSerialize);
-            writeFile("simplejaxb\\output\\results\\" + dtf.format(now) + "\\protoUnserialize.txt", protoUnserialize);
+            String folderPath = Integer.toString(numberProfessors) + "-" + Integer.toString(numberStudents) + "-" + Integer.toString(numberNames) + "-" + Integer.toString(simulationAmount);
+            new File("simplejaxb\\output\\results\\" + folderPath).mkdirs();
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\xmlMarshal.txt", xmlMarshal);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\ xmlUnmarshal.txt", xmlUnmarshal);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\xmlGZIPMarshal.txt", xmlGZIPMarshal);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\protoSerialize.txt", protoSerialize);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\protoUnserialize.txt", protoUnserialize);
 
         } catch (JAXBException e) {
             e.printStackTrace();
