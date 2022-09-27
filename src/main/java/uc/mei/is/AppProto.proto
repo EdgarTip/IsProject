@@ -14,6 +14,7 @@ message Student {
   optional string address = 5;
   optional Teacher teacher = 6;
   optional string registrationDate = 7;
+  optional string id = 8;
 }
 
 message Teacher {
@@ -22,6 +23,7 @@ message Teacher {
   optional string telephone = 3;
   optional string address = 4;
   repeated Student students = 5;
+  optional string id = 6;
 }
 
 message Classrooms{

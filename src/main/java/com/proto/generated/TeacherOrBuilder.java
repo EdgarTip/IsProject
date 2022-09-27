@@ -98,4 +98,21 @@ public interface TeacherOrBuilder extends
    */
   com.proto.generated.StudentOrBuilder getStudentsOrBuilder(
       int index);
+
+  /**
+   * <code>optional string id = 6;</code>
+   * @return Whether the id field is set.
+   */
+  boolean hasId();
+  /**
+   * <code>optional string id = 6;</code>
+   * @return The id.
+   */
+  java.lang.String getId();
+  /**
+   * <code>optional string id = 6;</code>
+   * @return The bytes for id.
+   */
+  com.google.protobuf.ByteString
+      getIdBytes();
 }

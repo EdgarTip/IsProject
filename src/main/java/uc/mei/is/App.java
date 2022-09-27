@@ -6,6 +6,8 @@ package uc.mei.is;
 
 // @Since 3.0.0, rebrand to jakarta.xml
 
+import com.proto.generated.Classrooms;
+import com.proto.generated.Teacher;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -14,17 +16,12 @@ import java.io.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import com.proto.generated.Classrooms;
-import com.proto.generated.Teacher;
 
 public class App {
 
@@ -71,39 +68,38 @@ public class App {
                 jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
                 //Serialize
-                xmlMarshal.add(serializeXML("simplejaxb\\output\\xmlNoComp.xml", clss, jaxbMarshaller));
+                xmlMarshal.add(serializeXML("output\\xmlNoComp.xml", clss, jaxbMarshaller));
 
                 //Unserialize
-                File file = new File("simplejaxb\\output\\xmlNoComp.xml");    
+                File file = new File("output\\xmlNoComp.xml");
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 xmlUnmarshal.add((unserializeXML(file, jaxbUnmarshaller)));
                 
                 //Serialize with Gzip compression
-                xmlGZIPMarshal.add(serializeXMLGzip(clss, jaxbMarshaller, "simplejaxb\\output\\xmlNoComp.xml", "simplejaxb\\output\\xmlGzip.xml"));
+                xmlGZIPMarshal.add(serializeXMLGzip(clss, jaxbMarshaller, "output\\xmlNoComp.xml", "output\\xmlGzip.xml"));
 
                 //Unserialize with Gzip compression
-                xmlGZIPUnmarshal.add(unserializeXMLGzip("simplejaxb\\output\\xmlGzip.xml", "simplejaxb\\output\\xmlGzipRemade.xml", jaxbUnmarshaller));
+                xmlGZIPUnmarshal.add(unserializeXMLGzip("output\\xmlGzip.xml", "output\\xmlGzipRemade.xml", jaxbUnmarshaller));
 
                 //Serialize Proto
-                protoSerialize.add(serializeProto("simplejaxb\\output\\classroom",tProto));
+                protoSerialize.add(serializeProto("output\\classroom",tProto));
                 
                 //Unserialize Proto
-                protoUnserialize.add(unserializeProto("simplejaxb\\output\\classroom"));
+                protoUnserialize.add(unserializeProto("output\\classroom"));
             
             }
 
-            String folderPath = Integer.toString(numberProfessors) + "-" + Integer.toString(numberStudents) + "-" + Integer.toString(numberNames) + "-" + Integer.toString(simulationAmount);
-            new File("simplejaxb\\output\\results\\" + folderPath).mkdirs();
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\1-xmlMarshal.txt", xmlMarshal);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\2-xmlUnmarshal.txt", xmlUnmarshal);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\3-xmlGZIPMarshal.txt", xmlGZIPMarshal);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\4-xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\5-protoSerialize.txt", protoSerialize);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\6-protoUnserialize.txt", protoUnserialize);
 
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            String folderPath = Integer.toString(numberProfessors) + "-" + Integer.toString(numberStudents) + "-" + Integer.toString(numberNames) + "-" + Integer.toString(simulationAmount);
+            new File("output\\results\\" + folderPath).mkdirs();
+            writeFile("output\\results\\" + folderPath + "\\1-xmlMarshal.txt", xmlMarshal);
+            writeFile("output\\results\\" + folderPath + "\\2-xmlUnmarshal.txt", xmlUnmarshal);
+            writeFile("output\\results\\" + folderPath + "\\3-xmlGZIPMarshal.txt", xmlGZIPMarshal);
+            writeFile("output\\results\\" + folderPath + "\\4-xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
+            writeFile("output\\results\\" + folderPath + "\\5-protoSerialize.txt", protoSerialize);
+            writeFile("output\\results\\" + folderPath + "\\6-protoUnserialize.txt", protoUnserialize);
+
+        } catch (JAXBException | IOException e) {
             e.printStackTrace();
         }
 
@@ -183,27 +179,52 @@ public class App {
         return elapsedTime;
         //System.out.println(classrooms);
     }
-    
+
+
     private static long unserializeProto(String filePath){
         // Proto Unmarshalling
         long elapsedTime = 0;
         Classrooms classr;
+        Classrooms.Builder classrr;
+
         try {
             long start = System.currentTimeMillis();
             classr = Classrooms.parseFrom(new FileInputStream(filePath));
+            List<Teacher> tchs = classr.getTeachersList();
+            ArrayList<Professor> professors = new ArrayList<>();
+
+            for (Teacher tch : tchs) {
+                Professor p = new Professor(tch.getName(), tch.getTelephone(), tch.getAddress(), tch.getBirthdate());
+
+                for (int j = 0; j < tch.getStudentsList().size(); j++) {
+
+                    com.proto.generated.Student aux = tch.getStudentsList().get(j);
+                    Student s = new Student(aux.getId(), aux.getName(), aux.getTelephone(), aux.getGender(), aux.getBirthdate(), aux.getAddress(), aux.getRegistrationDate());
+                    p.addStudent(s);
+                }
+                professors.add(p);
+            }
+
+            ClassT classroom = new ClassT();
+            classroom.setList(professors);
+
             long end = System.currentTimeMillis();
             elapsedTime = end - start;
 
             //System.out.println("\n-------\n");
             //System.out.println(classr);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return elapsedTime;
-        
+
     }
+
+
+
     //Serializes a file compressing it with Gzip
     private static long serializeXMLGzip(ClassT clss, Marshaller jaxbMarshaller, String filePath, String outputPath){
         byte[] buffer = new byte[1024];
@@ -307,19 +328,19 @@ public class App {
         ArrayList<com.proto.generated.Student> studentList = new ArrayList<com.proto.generated.Student>();
         ArrayList<com.proto.generated.Teacher> teacherList = new ArrayList<com.proto.generated.Teacher>();
         try {
-            s = new Scanner(new File("simplejaxb\\src\\main\\java\\uc\\mei\\is\\files\\firstNames.txt"));
+            s = new Scanner(new File("src\\main\\java\\uc\\mei\\is\\files\\firstNames.txt"));
 
             while (s.hasNext()){
                 firstNamesList.add(s.next());
             }
 
-            s = new Scanner(new File("simplejaxb\\src\\main\\java\\uc\\mei\\is\\files\\middleNames.txt"));
+            s = new Scanner(new File("src\\main\\java\\uc\\mei\\is\\files\\middleNames.txt"));
 
             while (s.hasNext()){
                 middleNamesList.add(s.next());
             }
 
-            s = new Scanner(new File("simplejaxb\\src\\main\\java\\uc\\mei\\is\\files\\addresses.txt"));
+            s = new Scanner(new File("src\\main\\java\\uc\\mei\\is\\files\\addresses.txt"));
 
             while (s.hasNext()){
                 addressesList.add(s.next());

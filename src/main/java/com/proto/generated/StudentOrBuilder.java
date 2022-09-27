@@ -123,4 +123,21 @@ public interface StudentOrBuilder extends
    */
   com.google.protobuf.ByteString
       getRegistrationDateBytes();
+
+  /**
+   * <code>optional string id = 8;</code>
+   * @return Whether the id field is set.
+   */
+  boolean hasId();
+  /**
+   * <code>optional string id = 8;</code>
+   * @return The id.
+   */
+  java.lang.String getId();
+  /**
+   * <code>optional string id = 8;</code>
+   * @return The bytes for id.
+   */
+  com.google.protobuf.ByteString
+      getIdBytes();
 }
