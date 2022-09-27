@@ -96,12 +96,12 @@ public class App {
 
             String folderPath = Integer.toString(numberProfessors) + "-" + Integer.toString(numberStudents) + "-" + Integer.toString(numberNames) + "-" + Integer.toString(simulationAmount);
             new File("simplejaxb\\output\\results\\" + folderPath).mkdirs();
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\xmlMarshal.txt", xmlMarshal);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\ xmlUnmarshal.txt", xmlUnmarshal);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\xmlGZIPMarshal.txt", xmlGZIPMarshal);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\protoSerialize.txt", protoSerialize);
-            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\protoUnserialize.txt", protoUnserialize);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\1-xmlMarshal.txt", xmlMarshal);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\2-xmlUnmarshal.txt", xmlUnmarshal);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\3-xmlGZIPMarshal.txt", xmlGZIPMarshal);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\4-xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\5-protoSerialize.txt", protoSerialize);
+            writeFile("simplejaxb\\output\\results\\" + folderPath + "\\6-protoUnserialize.txt", protoUnserialize);
 
         } catch (JAXBException e) {
             e.printStackTrace();
