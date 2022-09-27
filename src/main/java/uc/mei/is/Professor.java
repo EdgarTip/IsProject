@@ -47,6 +47,14 @@ public class Professor {
         this.birthdate = birthdate;
     }
 
+    public Professor(String name, String telephone, String address, String birthdate) {
+        list = new ArrayList<Student>();
+        this.name = name;
+        this.telephone = telephone;
+        this.address = address;
+        this.birthdate = birthdate;
+    }
+
     public String getId() {
         return this.id;
     }
@@ -91,5 +99,12 @@ public class Professor {
         list.add(student);
     }
 
+    public List<Student> getList() {
+        return list;
+    }
+
+    public void setList(List<Student> list) {
+        this.list = list;
+    }
 
 }
