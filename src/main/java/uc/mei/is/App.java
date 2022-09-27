@@ -82,7 +82,7 @@ public class App {
                 xmlGZIPMarshal.add(serializeXMLGzip(clss, jaxbMarshaller, "simplejaxb\\output\\xmlNoComp.xml", "simplejaxb\\output\\xmlGzip.xml"));
 
                 //Unserialize with Gzip compression
-                xmlGZIPUnmarshal.add(unserializeXMLGzip("simplejaxb\\output\\xmlGzip.xml", "simplejaxb\\output\\xmlGzipRemade.xml"));
+                xmlGZIPUnmarshal.add(unserializeXMLGzip("simplejaxb\\output\\xmlGzip.xml", "simplejaxb\\output\\xmlGzipRemade.xml", jaxbUnmarshaller));
 
                 //Serialize Proto
                 protoSerialize.add(serializeProto("simplejaxb\\output\\classroom",tProto));
@@ -91,8 +91,6 @@ public class App {
                 protoUnserialize.add(unserializeProto("simplejaxb\\output\\classroom"));
             
             }
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd-HH-mm-ss");
-            LocalDateTime now = LocalDateTime.now();
 
             String folderPath = Integer.toString(numberProfessors) + "-" + Integer.toString(numberStudents) + "-" + Integer.toString(numberNames) + "-" + Integer.toString(simulationAmount);
             new File("simplejaxb\\output\\results\\" + folderPath).mkdirs();
@@ -249,7 +247,7 @@ public class App {
     }
 
     //Unserealize a file that was compressed using Gzip
-    private static long unserializeXMLGzip(String filepath, String newFile){
+    private static long unserializeXMLGzip(String filepath, String newFile, Unmarshaller jaxbUnmarshaller){
         long elapsedTime = 0; 
         try {
             
@@ -263,16 +261,20 @@ public class App {
             while((len = gis.read(buffer)) != -1){
                 fos.write(buffer, 0, len);
             }
-
-            long end = System.currentTimeMillis();
-            elapsedTime = end - start;
-
             
             fos.close();
             gis.close();
 
+            File file = new File(newFile);
+
+            ClassT clss = (ClassT) jaxbUnmarshaller.unmarshal(file);
+            long end = System.currentTimeMillis();
+            elapsedTime = end - start;
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JAXBException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return elapsedTime;
