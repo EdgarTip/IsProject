@@ -89,15 +89,30 @@ public class App {
             
             }
 
+            ArrayList<Long> averageList = new ArrayList<Long>();
+            ArrayList<Double> standardDeviationList = new ArrayList<Double>();
+
+            averageList.add(calculateAverate(xmlMarshal));
+            averageList.add(calculateAverate(xmlUnmarshal));
+            averageList.add(calculateAverate(xmlGZIPMarshal));
+            averageList.add(calculateAverate(xmlGZIPUnmarshal));
+            averageList.add(calculateAverate(protoSerialize));
+            averageList.add(calculateAverate(protoUnserialize));
+
+
+            standardDeviationList.add(standardDeviation(xmlMarshal));
+            standardDeviationList.add(standardDeviation(xmlUnmarshal));
+            standardDeviationList.add(standardDeviation(xmlGZIPMarshal));
+            standardDeviationList.add(standardDeviation(xmlGZIPUnmarshal));
+            standardDeviationList.add(standardDeviation(protoSerialize));
+            standardDeviationList.add(standardDeviation(protoUnserialize));
+
 
             String folderPath = Integer.toString(numberProfessors) + "-" + Integer.toString(numberStudents) + "-" + Integer.toString(numberNames) + "-" + Integer.toString(simulationAmount);
             new File(path + "results\\" + folderPath).mkdirs();
-            writeFile(path + "results\\" + folderPath + "\\1-xmlMarshal.txt", xmlMarshal);
-            writeFile(path + "results\\" + folderPath + "\\2-xmlUnmarshal.txt", xmlUnmarshal);
-            writeFile(path + "results\\" + folderPath + "\\3-xmlGZIPMarshal.txt", xmlGZIPMarshal);
-            writeFile(path + "results\\" + folderPath + "\\4-xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
-            writeFile(path + "results\\" + folderPath + "\\5-protoSerialize.txt", protoSerialize);
-            writeFile(path + "results\\" + folderPath + "\\6-protoUnserialize.txt", protoUnserialize);
+
+            writeFile(path + "results\\" + folderPath + "\\1-Average.txt", averageList);
+            writeFileDouble(path + "results\\" + folderPath + "\\2-SD.txt", standardDeviationList);
 
         } catch (JAXBException | IOException e) {
             e.printStackTrace();
@@ -105,9 +120,44 @@ public class App {
 
     }
 
+    //Adapted from https://www.programiz.com/java-programming/examples/standard-deviation
+    public static double standardDeviation(ArrayList<Long> list)
+    {
+        double sum = 0.0, standardDeviation = 0.0;
+        int length = list.size();
+
+        for(double num : list) {
+            sum += num;
+        }
+
+        double mean = sum/length;
+
+        for(double num: list) {
+            standardDeviation += Math.pow(num - mean, 2);
+        }
+
+        return Math.sqrt(standardDeviation/length);
+    }
+
+    private static long calculateAverate(ArrayList<Long> list){
+        long average = 0;
+        for(int i = 0; i < list.size(); i++){
+            average += list.get(i);
+        }
+        return average / list.size();
+
+    }
     private static void writeFile(String filePath, ArrayList<Long> list) throws IOException{
         FileWriter writer = new FileWriter(filePath); 
             for(Long str: list) {
+                writer.write(str + System.lineSeparator());
+            }
+            writer.close();
+    }
+
+    private static void writeFileDouble(String filePath, ArrayList<Double> list) throws IOException{
+        FileWriter writer = new FileWriter(filePath); 
+            for(double str: list) {
                 writer.write(str + System.lineSeparator());
             }
             writer.close();
