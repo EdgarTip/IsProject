@@ -54,7 +54,7 @@ public class App {
 
             sc.close();
             
-
+            String path = "simplejaxb\\output\\";
 
             for(int i = 0; i < simulationAmount; i++){
                 //Create object
@@ -68,36 +68,36 @@ public class App {
                 jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
                 //Serialize
-                xmlMarshal.add(serializeXML("output\\xmlNoComp.xml", clss, jaxbMarshaller));
+                xmlMarshal.add(serializeXML(path + "xmlNoComp.xml", clss, jaxbMarshaller));
 
                 //Unserialize
-                File file = new File("output\\xmlNoComp.xml");
+                File file = new File(path + "xmlNoComp.xml");
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 xmlUnmarshal.add((unserializeXML(file, jaxbUnmarshaller)));
                 
                 //Serialize with Gzip compression
-                xmlGZIPMarshal.add(serializeXMLGzip(clss, jaxbMarshaller, "output\\xmlNoComp.xml", "output\\xmlGzip.xml"));
+                xmlGZIPMarshal.add(serializeXMLGzip(clss, jaxbMarshaller, path + "xmlNoComp.xml", path + "xmlGzip.xml"));
 
                 //Unserialize with Gzip compression
-                xmlGZIPUnmarshal.add(unserializeXMLGzip("output\\xmlGzip.xml", "output\\xmlGzipRemade.xml", jaxbUnmarshaller));
+                xmlGZIPUnmarshal.add(unserializeXMLGzip(path + "xmlGzip.xml", path + "xmlGzipRemade.xml", jaxbUnmarshaller));
 
                 //Serialize Proto
-                protoSerialize.add(serializeProto("output\\classroom",tProto));
+                protoSerialize.add(serializeProto(path + "classroom",tProto));
                 
                 //Unserialize Proto
-                protoUnserialize.add(unserializeProto("output\\classroom"));
+                protoUnserialize.add(unserializeProto(path + "classroom"));
             
             }
 
 
             String folderPath = Integer.toString(numberProfessors) + "-" + Integer.toString(numberStudents) + "-" + Integer.toString(numberNames) + "-" + Integer.toString(simulationAmount);
-            new File("output\\results\\" + folderPath).mkdirs();
-            writeFile("output\\results\\" + folderPath + "\\1-xmlMarshal.txt", xmlMarshal);
-            writeFile("output\\results\\" + folderPath + "\\2-xmlUnmarshal.txt", xmlUnmarshal);
-            writeFile("output\\results\\" + folderPath + "\\3-xmlGZIPMarshal.txt", xmlGZIPMarshal);
-            writeFile("output\\results\\" + folderPath + "\\4-xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
-            writeFile("output\\results\\" + folderPath + "\\5-protoSerialize.txt", protoSerialize);
-            writeFile("output\\results\\" + folderPath + "\\6-protoUnserialize.txt", protoUnserialize);
+            new File(path + "results\\" + folderPath).mkdirs();
+            writeFile(path + "results\\" + folderPath + "\\1-xmlMarshal.txt", xmlMarshal);
+            writeFile(path + "results\\" + folderPath + "\\2-xmlUnmarshal.txt", xmlUnmarshal);
+            writeFile(path + "results\\" + folderPath + "\\3-xmlGZIPMarshal.txt", xmlGZIPMarshal);
+            writeFile(path + "results\\" + folderPath + "\\4-xmlGZIPUnmarshal.txt", xmlGZIPUnmarshal);
+            writeFile(path + "results\\" + folderPath + "\\5-protoSerialize.txt", protoSerialize);
+            writeFile(path + "results\\" + folderPath + "\\6-protoUnserialize.txt", protoUnserialize);
 
         } catch (JAXBException | IOException e) {
             e.printStackTrace();
@@ -327,20 +327,21 @@ public class App {
         ArrayList<String> addressesList = new ArrayList<String>();
         ArrayList<com.proto.generated.Student> studentList = new ArrayList<com.proto.generated.Student>();
         ArrayList<com.proto.generated.Teacher> teacherList = new ArrayList<com.proto.generated.Teacher>();
+        String pathFile = "simplejaxb\\";
         try {
-            s = new Scanner(new File("src\\main\\java\\uc\\mei\\is\\files\\firstNames.txt"));
+            s = new Scanner(new File(pathFile + "src\\main\\java\\uc\\mei\\is\\files\\firstNames.txt"));
 
             while (s.hasNext()){
                 firstNamesList.add(s.next());
             }
 
-            s = new Scanner(new File("src\\main\\java\\uc\\mei\\is\\files\\middleNames.txt"));
+            s = new Scanner(new File(pathFile + "src\\main\\java\\uc\\mei\\is\\files\\middleNames.txt"));
 
             while (s.hasNext()){
                 middleNamesList.add(s.next());
             }
 
-            s = new Scanner(new File("src\\main\\java\\uc\\mei\\is\\files\\addresses.txt"));
+            s = new Scanner(new File(pathFile + "src\\main\\java\\uc\\mei\\is\\files\\addresses.txt"));
 
             while (s.hasNext()){
                 addressesList.add(s.next());
